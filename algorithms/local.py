@@ -1,7 +1,10 @@
 from __future__ import annotations
 import random
 import time
-from ..problem import *
+try:
+    from ..problem import *
+except ImportError:
+    pass
 
 def random_mapping(self:problem,used_symbols:list[str]) -> dict[str,bool]:
     ret = {}

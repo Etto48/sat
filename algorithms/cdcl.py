@@ -2,9 +2,12 @@ from __future__ import annotations
 from multiprocessing import pool
 from re import L
 import time
-from ..literal import *
-from ..clause import *
-from ..problem import *
+try:
+    from ..literal import *
+    from ..clause import *
+    from ..problem import *
+except ImportError:
+    pass
 
 class history:
     def __init__(self):
