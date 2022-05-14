@@ -22,6 +22,8 @@ class problem:
         from .algorithms.local import walk_sat
         from .algorithms.local import g_sat
         from .algorithms.local import gw_sat
+        from .algorithms.experimental.continuous_gradient import cg_sat
+        from .algorithms.experimental.continuous_gradient import cg_sat_finalizer
     except ImportError:
         from algorithms.dpll import dpll_sat
         from algorithms.cdcl import cdcl_sat
@@ -30,6 +32,8 @@ class problem:
         from algorithms.local import walk_sat
         from algorithms.local import g_sat
         from algorithms.local import gw_sat
+        from algorithms.experimental.continuous_gradient import cg_sat
+        from algorithms.experimental.continuous_gradient import cg_sat_finalizer
 
     def __init__(self,clauses:list[clause]):
         self.score_cache = {}

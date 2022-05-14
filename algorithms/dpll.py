@@ -1,4 +1,12 @@
-def dpll_sat(self,mappings:dict[str,bool] = {}) -> bool:
+from __future__ import annotations
+
+try:
+    from ..problem import *
+except:
+    pass
+
+
+def dpll_sat(self:problem,mappings:dict[str,bool] = {}) -> bool:
         def choose_literal(mappings:dict[str,bool]) -> tuple[str,bool]:
             undefined = self.undefined_symbols(mappings)
             undefined.sort(key=lambda s:abs(self.symbol_score(s)),reverse=True)
@@ -20,6 +28,7 @@ def dpll_sat(self,mappings:dict[str,bool] = {}) -> bool:
             new_mappings[pure_literals[0].name]=not pure_literals[0].negated
         
         if self.eval(new_mappings):
+            self.solution = new_mappings
             return True
         elif len(new_mappings)>=len(self.used_symbols):
             return False

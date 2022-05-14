@@ -1,13 +1,17 @@
 from __future__ import annotations
-from multiprocessing import pool
-from re import L
+import random
+import sys
+import os
 import time
 try:
     from ..literal import *
     from ..clause import *
     from ..problem import *
 except ImportError:
-    pass
+    sys.path.append(os.path.abspath('..'))
+    from literal import *
+    from clause import *
+    from problem import *
 
 class history:
     def __init__(self):
@@ -67,7 +71,7 @@ class dependency_graph:
         return str([str(v) for k,v in self.nodes.items()])
 
 
-def cdcl_sat(self:problem,time_limit:int = 0) -> bool:
+def cdcl_sat(self:problem,time_limit:int = 0) -> bool|None:
     start_time = time.time()
     
     branching_symbols:set[str] = set()
@@ -170,13 +174,13 @@ def cdcl_sat(self:problem,time_limit:int = 0) -> bool:
             if k <= level:
                 continue
             hist.delete_level(k)
-            
+    
     def best_symbol_value(symbol:str) -> bool:        
-        score = self.symbol_score(symbol)
-        #if score != 0:
-        return score > 0
+        #if symbol in best_mappings:
+        #    return best_mappings[symbol] > 0.5
         #else:
-            #return random.choice([True,False])
+        score = self.symbol_score(symbol)
+        return score > 0
 
 
     def pick_branching_symbol(mappings:dict[str,bool]) -> tuple[str,bool]:
@@ -187,8 +191,8 @@ def cdcl_sat(self:problem,time_limit:int = 0) -> bool:
 
     sat_len = 0
     while time_limit == 0 or time.time() - start_time < time_limit:
-        #sat_len = max(len(self.sat_clauses(mappings)),sat_len)
-        #print(f"+{len(self.added_clauses)} {sat_len}/{len(self.clauses)} {sat_len*100/len(self.clauses):0.02f}%   ",end='\r')
+        sat_len = max(len(self.sat_clauses(mappings)),sat_len)
+        print(f"+{len(self.added_clauses)} {sat_len}/{len(self.clauses)} {sat_len*100/len(self.clauses):0.02f}%   ",end='\r')
         conflicting_clause = unit_propagation(mappings)
         if conflicting_clause is not None:
             level, learnt = conflict_analyze(conflicting_clause)
